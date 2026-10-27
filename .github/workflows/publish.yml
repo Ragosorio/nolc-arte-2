@@ -20,11 +20,12 @@ on:
         default: main
   repository_dispatch:
     types: [publish-art]
-  # SECOND art site (shard 1 of 2). The 6-hourly schedule of the first site is OFF here on purpose until the game's
-  # main branch carries the pinned shards (game/src/art/artShardPins.ts): with the old hash rule a run would copy half
-  # of the published cats here. Turn it on (uncomment) in step 5 of docs/part-iii/12-hosting-arte-p3.md.
-  # schedule:
-  #   - cron: '53 */6 * * *'
+  # SECOND art site (shard 1 of 2). Every 6 h (30 min after the first site) the job compares the game's cats-svg tree
+  # with the one already published and only deploys when it changed. The game's main carries the pinned shards
+  # (game/src/art/artShardPins.ts) since the Parte III release, so this site only ever gets its own half.
+  # (GitHub disables schedules in public repos after 60 days without activity: re-enable it in Actions.)
+  schedule:
+    - cron: '53 */6 * * *'
 
 permissions:
   contents: read
